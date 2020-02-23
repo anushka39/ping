@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Ping</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="button_login">login</string>
+    <string name="text_signUp">No account? Go to signup</string>
+</resources>

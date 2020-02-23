@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1012504060269",
+    "firebase_url": "https://ping-982be.firebaseio.com",
+    "project_id": "ping-982be",
+    "storage_bucket": "ping-982be.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1012504060269:android:f79bec38f315d03fe03a64",
+        "android_client_info": {
+          "package_name": "com.example.ping"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1012504060269-uplpo4qfddak5cv9vrsomefmj2ipaevm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKCOdd7YgyBbBo2U8yBMIdwuv_C5c1eDM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1012504060269-uplpo4qfddak5cv9vrsomefmj2ipaevm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
