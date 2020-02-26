@@ -9,14 +9,16 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
-import com.google.android.gms.tasks.Task
+import com.example.ping.util.DATA_USERS
+import com.example.ping.util.User
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.activity_login.*
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.activity_sign_up.*
 
-class LoginActivity : AppCompatActivity()  {
+class SignUpActivity : AppCompatActivity() {
 
+    private val firebaseDB = FirebaseFirestore.getInstance()
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val firebaseAuthListener = firebaseAuth.addAuthStateListener {
         val user = firebaseAuth.currentUser?.uid
@@ -25,14 +27,16 @@ class LoginActivity : AppCompatActivity()  {
             finish()
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_sign_up)
 
+        setTextChangeListener(usernameET,usernameTIL)
         setTextChangeListener(emailET, emailTIL)
         setTextChangeListener(passwordET, passwordTIL)
-        
-        loginProgressLayout.setOnTouchListener { v, event -> true }
+
+        signupProgressLayout.setOnTouchListener { v, event -> true }
     }
     fun setTextChangeListener(et: EditText, til: TextInputLayout) {
         et.addTextChangedListener(object: TextWatcher {
@@ -47,8 +51,14 @@ class LoginActivity : AppCompatActivity()  {
 
         })
     }
-    fun onLogin(v: View){
+    fun onSignup(v: View){
+
         var proceed = true
+        if(usernameET.text.isNullOrEmpty()){
+            usernameTIL.error="Username is required"
+            usernameTIL.isErrorEnabled = true
+            proceed = false
+        }
         if(emailET.text.isNullOrEmpty()) {
             emailTIL.error = "Email is required"
             emailTIL.isErrorEnabled = true
@@ -60,23 +70,29 @@ class LoginActivity : AppCompatActivity()  {
             proceed = false
         }
         if (proceed) {
-            loginProgressLayout.visibility = View.VISIBLE
-            firebaseAuth.signInWithEmailAndPassword(emailET.text.toString(),passwordET.text.toString())
-                .addOnCompleteListener {task: Task<AuthResult> ->
+            signupProgressLayout.visibility = View.VISIBLE
+            firebaseAuth.createUserWithEmailAndPassword(emailET.text.toString(), passwordET.text.toString())
+                .addOnCompleteListener {task ->
                     if (!task.isSuccessful) {
-                        loginProgressLayout.visibility = View.GONE
                         Toast.makeText(this , "Login error: ${task.exception?.localizedMessage}", Toast.LENGTH_SHORT).show()
+                    } else {
+                        val email =emailET.text.toString()
+                        val name = usernameET.text.toString()
+                        val user = User(email, name, "", arrayListOf(), arrayListOf() )
+                        firebaseDB.collection(DATA_USERS).document(firebaseAuth.uid!!).set(user)
                     }
+                    signupProgressLayout.visibility = View.GONE
                 }
                 .addOnFailureListener {e ->
                     e.printStackTrace()
-                    loginProgressLayout.visibility = View.GONE
+                    signupProgressLayout.visibility = View.GONE
                 }
         }
 
+
     }
-    fun goToSignUp(v: View){
-        startActivity(SignUpActivity.newIntent(this))
+    fun goToLogin(v: View){
+        startActivity(LoginActivity.newIntent(this))
         finish()
     }
 
@@ -90,9 +106,7 @@ class LoginActivity : AppCompatActivity()  {
         firebaseAuth.removeAuthStateListener{firebaseAuthListener}
 
     }
-
     companion object {
-        fun newIntent(context: Context)= Intent(context, LoginActivity::class.java )
+        fun newIntent(context: Context)= Intent(context, SignUpActivity::class.java )
     }
 }
-
