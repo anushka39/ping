@@ -13,18 +13,24 @@ import com.example.ping.R
 import com.example.ping.fragments.HomeFragment
 import com.example.ping.fragments.MyActivityFragment
 import com.example.ping.fragments.SearchFragment
+import com.example.ping.util.DATA_USERS
+import com.example.ping.util.User
+import com.example.ping.util.loadUrl
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : AppCompatActivity() {
 
     private var sectionsPagerAdapter: SectionPageAdapter? = null
     private val firebaseAuth = FirebaseAuth.getInstance()
+    private val firebaseDB = FirebaseFirestore.getInstance()
     private val homeFragment = HomeFragment()
     private val searchFragment = SearchFragment()
     private val myActivityFragment = MyActivityFragment()
     private var userId = FirebaseAuth.getInstance().currentUser?.uid
+    private var user: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,12 +50,9 @@ class HomeActivity : AppCompatActivity() {
             }
 
         })
-    }
-
-    fun onLogout(v: View){
-        firebaseAuth.signOut()
-        startActivity(LoginActivity.newIntent(this))
-        finish()
+        logo.setOnClickListener { view ->
+            startActivity(ProfileActivity.newIntent(this))
+        }
     }
 
     override fun onResume() {
@@ -59,8 +62,24 @@ class HomeActivity : AppCompatActivity() {
             startActivity(LoginActivity.newIntent(this))
             finish()
         }
+     //   populate()
     }
-
+//
+//    fun populate() {
+//        homeProgressLayout.visibility = View.VISIBLE
+//        firebaseDB.collection(DATA_USERS).document(userId!!).get()
+//            .addOnSuccessListener {documentSnapshot ->
+//                homeProgressLayout. visibility = View.GONE
+//                user = documentSnapshot.toObject(User::class.java)
+//                user?.imageUrl?.let {
+//                    logo.loadUrl(it, R.drawable.plogo)
+//                }
+//            }
+//            .addOnFailureListener { e ->
+//                e.printStackTrace()
+//                finish()
+//            }
+//    }
     inner class SectionPageAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         override fun getItem(position: Int): Fragment {
             return when(position) {

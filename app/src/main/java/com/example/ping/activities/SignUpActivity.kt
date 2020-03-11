@@ -1,4 +1,4 @@
-package com.example.ping
+package com.example.ping.activities
 
 import android.content.Context
 import android.content.Intent
@@ -9,6 +9,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import com.example.ping.R
 import com.example.ping.util.DATA_USERS
 import com.example.ping.util.User
 import com.google.android.material.textfield.TextInputLayout
