@@ -95,7 +95,7 @@ class ProfileActivity : AppCompatActivity() {
                     filePath.downloadUrl
                         .addOnSuccessListener { uri ->
                             val url = uri.toString()
-                            firebaseDB.collection(DATA_USERS).document(userId!!).update(DATA_USER_IMAGE_URL, url)
+                            firebaseDB.collection(DATA_USERS).document(userId!!).update("imageUrl" , url)
                                 .addOnSuccessListener {
                                     imageUrl = url
                                     photoIV.loadUrl(imageUrl, R.drawable.plogo)

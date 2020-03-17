@@ -53,6 +53,10 @@ class HomeActivity : AppCompatActivity() {
         logo.setOnClickListener { view ->
             startActivity(ProfileActivity.newIntent(this))
         }
+        fab.setOnClickListener {
+            startActivity(MessageActivity.newIntent(this,userId, user?.username))
+        }
+        homeProgressLayout.setOnTouchListener { v, event -> true }
     }
 
     override fun onResume() {
@@ -62,24 +66,24 @@ class HomeActivity : AppCompatActivity() {
             startActivity(LoginActivity.newIntent(this))
             finish()
         }
-     //   populate()
+        populate()
     }
-//
-//    fun populate() {
-//        homeProgressLayout.visibility = View.VISIBLE
-//        firebaseDB.collection(DATA_USERS).document(userId!!).get()
-//            .addOnSuccessListener {documentSnapshot ->
-//                homeProgressLayout. visibility = View.GONE
-//                user = documentSnapshot.toObject(User::class.java)
-//                user?.imageUrl?.let {
-//                    logo.loadUrl(it, R.drawable.plogo)
-//                }
-//            }
-//            .addOnFailureListener { e ->
-//                e.printStackTrace()
-//                finish()
-//            }
-//    }
+
+    fun populate() {
+        homeProgressLayout.visibility = View.VISIBLE
+        firebaseDB.collection(DATA_USERS).document(userId!!).get()
+            .addOnSuccessListener {documentSnapshot ->
+                homeProgressLayout. visibility = View.GONE
+                user = documentSnapshot.toObject(User::class.java)
+                user?.imageUrl?.let {
+                    logo.loadUrl(it, R.drawable.plogo)
+                }
+            }
+            .addOnFailureListener { e ->
+                e.printStackTrace()
+                finish()
+            }
+   }
     inner class SectionPageAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         override fun getItem(position: Int): Fragment {
             return when(position) {

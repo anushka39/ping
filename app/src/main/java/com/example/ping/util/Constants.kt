@@ -10,3 +10,10 @@ val DATA_USER_HASHTAGS = "followHashtags"
 val DATA_USER_FOLLOW = "followUsers"
 
 val DATA_IMAGES = "ProfileImages"
+
+val DATA_MESSAGES="messages"
+val DATA_MESSAGE_USER_IDS="userIds"
+val DATA_MESSAGE_HASHTAGS="hashtags"
+val DATA_MESSAGE_LIKES="likes"
+
+val DATA_MESSAGE_IMAGES="MessageImages"
