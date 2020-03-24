@@ -5,7 +5,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.TableLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -54,7 +53,7 @@ class HomeActivity : AppCompatActivity() {
             startActivity(ProfileActivity.newIntent(this))
         }
         fab.setOnClickListener {
-            startActivity(MessageActivity.newIntent(this,userId, user?.username))
+            startActivity(PostActivity.newIntent(this,userId, user?.username))
         }
         homeProgressLayout.setOnTouchListener { v, event -> true }
     }

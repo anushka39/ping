@@ -45,7 +45,7 @@ class ProfileActivity : AppCompatActivity() {
             .addOnSuccessListener { documentSnapshot ->
                 val user = documentSnapshot.toObject(User::class.java)
                 usernameET.setText(user?.username, TextView.BufferType.EDITABLE)
-                emailET.setText(user?.email, TextView.BufferType.EDITABLE)
+                //emailET.setText(user?.email, TextView.BufferType.EDITABLE)
                 imageUrl = user?.imageUrl
                 imageUrl?.let {
                     photoIV.loadUrl(user?.imageUrl, R.drawable.plogo)
@@ -60,10 +60,10 @@ class ProfileActivity : AppCompatActivity() {
     fun onApply(v: View){
         profileProgressLayout.visibility = View.VISIBLE
         val username = usernameET.text.toString()
-        val email = emailET.text.toString()
+        //val email = emailET.text.toString()
         val map = HashMap<String, Any>()
         map[DATA_USER_USERNAME] = username
-        map[DATA_USER_EMAIL] = email
+        //map[DATA_USER_EMAIL] = email
 
         firebaseDB.collection(DATA_USERS).document(userId!!).update(map)
             .addOnSuccessListener {

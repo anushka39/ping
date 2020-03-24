@@ -41,25 +41,25 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/emailTIL"
-                android:layout_width="@dimen/standard_width"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/grid_2x"
-                android:layout_below="@id/usernameTIL">
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                android:id="@+id/emailTIL"-->
+<!--                android:layout_width="@dimen/standard_width"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:paddingBottom="@dimen/grid_2x"-->
+<!--                android:layout_below="@id/usernameTIL">-->
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/emailET"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_email"/>
-            </com.google.android.material.textfield.TextInputLayout>
+<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                    android:id="@+id/emailET"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:hint="@string/hint_email"/>-->
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
 
             <Button
                 android:id="@+id/applyButton"
                 android:layout_width="@dimen/standard_width"
                 android:layout_height="@dimen/standard_height"
-                android:layout_below="@id/emailTIL"
+                android:layout_below="@id/usernameTIL"
                 android:layout_marginBottom="@dimen/grid_2x"
                 android:onClick="onApply"
                 android:text="@string/button_apply"

@@ -7,12 +7,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.example.ping.R
-import com.example.ping.util.DATA_MESSAGES
+import com.example.ping.util.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_message.*
 
-class MessageActivity : AppCompatActivity() {
+class PostActivity : AppCompatActivity() {
 
     private val firebaseDB = FirebaseFirestore.getInstance()
     private val firebaseStorage = FirebaseStorage.getInstance().reference
@@ -57,13 +57,14 @@ class MessageActivity : AppCompatActivity() {
     fun getHashtags(source: String): ArrayList<String> {
         val hashtags = arrayListOf<String>()
         var text = source
+       // hashtags.add(text)
 
         while (text.contains("#")){
             var hashtag = ""
             val hash = text.indexOf("#")
             text = text.substring(hash + 1)
-
-            val firstSpace = text.indexOf("")
+           // hashtags.add(text)
+            val firstSpace = text.indexOf(" ")
             val firstHash = text.indexOf("#")
 
             if(firstSpace == -1 && firstHash == -1){
@@ -76,8 +77,9 @@ class MessageActivity : AppCompatActivity() {
                 text = text.substring(firstHash)
             }
             if (!hashtag.isNullOrEmpty()){
-                hashtags.add(hashtag)
+              hashtags.add(hashtag)
             }
+          //  hashtags.add(text)
         }
         return hashtags
     }
@@ -85,7 +87,7 @@ class MessageActivity : AppCompatActivity() {
         val PARAM_USER_ID = "UserId"
         val PARAM_USER_NAME = "UserName"
         fun newIntent(context: Context, userId: String?, userName: String? ):Intent {
-            val intent = Intent(context, MessageActivity::class.java )
+            val intent = Intent(context, PostActivity::class.java )
             intent.putExtra(PARAM_USER_ID,userId)
             intent.putExtra(PARAM_USER_NAME, userName)
             return intent
