@@ -1,7 +1,9 @@
 package com.example.ping.activities
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -16,7 +18,7 @@ class PostActivity : AppCompatActivity() {
 
     private val firebaseDB = FirebaseFirestore.getInstance()
     private val firebaseStorage = FirebaseStorage.getInstance().reference
-    private val imageUrl: String? = null
+    private var imageUrl: String? = null
     private var userId:String? = null
     private var userName:String? = null
 
@@ -35,9 +37,44 @@ class PostActivity : AppCompatActivity() {
     }
 
     fun addImage(v: View){
-
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, REQUEST_CODE_PHOTO)
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_PHOTO) {
+            storeImage(data?.data)
+        }
     }
 
+    fun storeImage(imageUri: Uri?) {
+        imageUri?.let {
+            Toast.makeText(this, "Uploading...", Toast.LENGTH_SHORT).show()
+            messageProgressLayout.visibility = View.VISIBLE
+
+            val filePath = firebaseStorage.child(DATA_IMAGES).child(userId!!)
+            filePath.putFile(imageUri)
+                .addOnSuccessListener {
+                    filePath.downloadUrl
+                        .addOnSuccessListener { uri ->
+                            imageUrl = uri.toString()
+                            messageImage.loadUrl(imageUrl, R.drawable.logo)
+                            messageProgressLayout.visibility = View.GONE
+                        }
+                        .addOnFailureListener {
+                            onUploadFailure()
+                        }
+                }
+                .addOnFailureListener {
+                    onUploadFailure()
+                }
+        }
+    }
+    fun onUploadFailure(){
+        Toast.makeText( this, "Image upload failed. Please try again later.",Toast.LENGTH_SHORT).show()
+        messageProgressLayout.visibility = View.GONE
+    }
     fun postMessage(v: View){
         messageProgressLayout.visibility = View.VISIBLE
         val text = messageText.text.toString()
