@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_search.*
 
 class SearchFragment : PingFragment() {
 
-    private var currentHahtag = ""
+    private var currentHashtag = ""
     private var messageAdapter: PostListAdapter? = null
     private var currentUser: User? = null
     private val firebaseDB = FirebaseFirestore.getInstance()
@@ -43,7 +43,7 @@ class SearchFragment : PingFragment() {
 
         messageAdapter = PostListAdapter(userId!!, arrayListOf())
         messageAdapter?.setListener(listener)
-        postList.apply {
+        postList?.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = messageAdapter
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
@@ -56,20 +56,20 @@ class SearchFragment : PingFragment() {
     }
 
     fun newHashtag(term: String){
-        currentHahtag = term
+        currentHashtag = term
         followHashtag.visibility = View.VISIBLE
         updateList()
     }
 
     fun updateList() {
         postList?.visibility = View.GONE
-        firebaseDB.collection(DATA_MESSAGES).whereArrayContains(DATA_MESSAGE_HASHTAGS, currentHahtag).get()
+        firebaseDB.collection(DATA_MESSAGES).whereArrayContains(DATA_MESSAGE_HASHTAGS, currentHashtag).get()
             .addOnSuccessListener {list ->
                 postList?.visibility = View.VISIBLE
                 val posts = arrayListOf<Message>()
                 for (document in list.documents){
                     val post = document.toObject(Message::class.java)
-                    post?.let{posts.add(it)}
+                    post?.let{ posts.add(it)}
                 }
                 val sortedMessages = posts.sortedWith(compareByDescending { it.timestamp })
                 messageAdapter?.updatePosts(sortedMessages)

@@ -46,11 +46,11 @@ class PostListAdapter(val userId: String, val messages: ArrayList<Message>) :
         private val like = v.findViewById<ImageView>(R.id.postLike)
         private val likeCount = v.findViewById<TextView>(R.id.postLikeCount)
         private val repost = v.findViewById<ImageView>(R.id.postRepost)
-        private val repostCount = v.findViewById<TextView>(R.id.postRetweetCount)
+        private val repostCount = v.findViewById<TextView>(R.id.postRepostCount)
 
         fun bind(userId: String, message: Message, listener: PostListener?){
             username.text = message.text
-            text.text=message.text
+            text.text =message.text
             if(message.imageUrl.isNullOrEmpty()){
                 image.visibility = View.GONE
             } else {
