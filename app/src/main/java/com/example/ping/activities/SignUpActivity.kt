@@ -24,7 +24,7 @@ class SignUpActivity : AppCompatActivity() {
     private val firebaseAuthListener = firebaseAuth.addAuthStateListener {
         val user = firebaseAuth.currentUser?.uid
         user?.let {
-            startActivity(HomeActivity.newIntent(this))
+            startActivity(LoginActivity.newIntent(this))
             finish()
         }
     }
@@ -77,10 +77,20 @@ class SignUpActivity : AppCompatActivity() {
                     if (!task.isSuccessful) {
                         Toast.makeText(this , "Login error: ${task.exception?.localizedMessage}", Toast.LENGTH_SHORT).show()
                     } else {
-                        val email =emailET.text.toString()
-                        val name = usernameET.text.toString()
-                        val user = User(email, name, "", arrayListOf(), arrayListOf() )
-                        firebaseDB.collection(DATA_USERS).document(firebaseAuth.uid!!).set(user)
+                        firebaseAuth.currentUser?.sendEmailVerification()?.addOnCompleteListener{
+                            if(task.isSuccessful) {
+                                Toast.makeText(this,"verification mail sent", Toast.LENGTH_SHORT).show()
+                                val email =emailET.text.toString()
+                                val name = usernameET.text.toString()
+                                val user = User(email, name, "", arrayListOf(), arrayListOf() )
+                                firebaseDB.collection(DATA_USERS).document(firebaseAuth.uid!!).set(user)
+
+                            }
+                        }
+                       // val email =emailET.text.toString()
+                      //  val name = usernameET.text.toString()
+                      //  val user = User(email, name, "", arrayListOf(), arrayListOf() )
+                      //  firebaseDB.collection(DATA_USERS).document(firebaseAuth.uid!!).set(user)
                     }
                     signupProgressLayout.visibility = View.GONE
                 }

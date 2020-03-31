@@ -10,9 +10,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import com.example.ping.R
-import com.google.android.gms.tasks.Task
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -21,6 +19,7 @@ class LoginActivity : AppCompatActivity()  {
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val firebaseAuthListener = firebaseAuth.addAuthStateListener {
         val user = firebaseAuth.currentUser?.uid
+        val users = FirebaseAuth.getInstance().currentUser
         user?.let {
             startActivity(HomeActivity.newIntent(this))
             finish()
@@ -48,9 +47,10 @@ class LoginActivity : AppCompatActivity()  {
 
         })
     }
-    fun onLogin(v: View){
+    fun onLogin(v: View) {
         var proceed = true
-        if(emailET.text.isNullOrEmpty()) {
+        val users = FirebaseAuth.getInstance().currentUser
+        if (emailET.text.isNullOrEmpty()) {
             emailTIL.error = "Email is required"
             emailTIL.isErrorEnabled = true
             proceed = false
@@ -60,22 +60,34 @@ class LoginActivity : AppCompatActivity()  {
             passwordTIL.isErrorEnabled = true
             proceed = false
         }
-        if (proceed) {
-            loginProgressLayout.visibility = View.VISIBLE
-            firebaseAuth.signInWithEmailAndPassword(emailET.text.toString(),passwordET.text.toString())
-                .addOnCompleteListener {task: Task<AuthResult> ->
-                    if (!task.isSuccessful) {
-                        loginProgressLayout.visibility = View.GONE
-                        Toast.makeText(this , "Login error: ${task.exception?.localizedMessage}", Toast.LENGTH_SHORT).show()
-                    }
-                }
-                .addOnFailureListener {e ->
-                    e.printStackTrace()
-                    loginProgressLayout.visibility = View.GONE
-                }
-        }
 
+        if (proceed) {
+            while (users != null && !users.isEmailVerified) {
+                loginProgressLayout.visibility = View.VISIBLE
+                Toast.makeText(this, " login error please verify", Toast.LENGTH_LONG).show()
+//                firebaseAuth.signInWithEmailAndPassword(
+//                    emailET.text.toString(),
+//                    passwordET.text.toString()
+//                )
+//                    .addOnCompleteListener { task: Task<AuthResult> ->
+//                        if (!task.isSuccessful) {
+//                            loginProgressLayout.visibility = View.GONE
+//                            Toast.makeText(
+//                                this,
+//                                "Login error: ${task.exception?.localizedMessage}",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                        }
+//                    }
+//                    .addOnFailureListener { e ->
+//                        e.printStackTrace()
+//                        loginProgressLayout.visibility = View.GONE
+//                    }
+            }
+            Toast.makeText(this,"you are verified", Toast.LENGTH_LONG).show()
+        }
     }
+
     fun goToSignUp(v: View){
         startActivity(SignUpActivity.newIntent(this))
         finish()

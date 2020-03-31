@@ -63,7 +63,8 @@ class SearchFragment : PingFragment() {
 
     fun updateList() {
         postList?.visibility = View.GONE
-        firebaseDB.collection(DATA_MESSAGES).whereArrayContains(DATA_MESSAGE_HASHTAGS, currentHashtag).get()
+        firebaseDB.collection(DATA_MESSAGES)
+            .whereArrayContains(DATA_MESSAGE_HASHTAGS, currentHashtag).get()
             .addOnSuccessListener {list ->
                 postList?.visibility = View.VISIBLE
                 val posts = arrayListOf<Message>()
