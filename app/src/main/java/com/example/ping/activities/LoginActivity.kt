@@ -10,7 +10,9 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import com.example.ping.R
+import com.google.android.gms.tasks.Task
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -18,12 +20,12 @@ class LoginActivity : AppCompatActivity()  {
 
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val firebaseAuthListener = firebaseAuth.addAuthStateListener {
-        val user = firebaseAuth.currentUser?.uid
-        val users = FirebaseAuth.getInstance().currentUser
-        user?.let {
-            startActivity(HomeActivity.newIntent(this))
-            finish()
-        }
+
+
+//        user?.let {
+//            startActivity(HomeActivity.newIntent(this))
+//            finish()
+//        }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,9 +64,10 @@ class LoginActivity : AppCompatActivity()  {
         }
 
         if (proceed) {
-            while (users != null && !users.isEmailVerified) {
+
+            if (users != null && !users.isEmailVerified) {
                 loginProgressLayout.visibility = View.VISIBLE
-                Toast.makeText(this, " login error please verify", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "if loop", Toast.LENGTH_LONG).show()
 //                firebaseAuth.signInWithEmailAndPassword(
 //                    emailET.text.toString(),
 //                    passwordET.text.toString()
@@ -73,9 +76,7 @@ class LoginActivity : AppCompatActivity()  {
 //                        if (!task.isSuccessful) {
 //                            loginProgressLayout.visibility = View.GONE
 //                            Toast.makeText(
-//                                this,
-//                                "Login error: ${task.exception?.localizedMessage}",
-//                                Toast.LENGTH_SHORT
+//                                this, "Login error: ${task.exception?.localizedMessage}", Toast.LENGTH_SHORT
 //                            ).show()
 //                        }
 //                    }
@@ -83,8 +84,12 @@ class LoginActivity : AppCompatActivity()  {
 //                        e.printStackTrace()
 //                        loginProgressLayout.visibility = View.GONE
 //                    }
+//                startActivity(HomeActivity.newIntent(this))
+//                finish()
+            } else {
+                Toast.makeText(this, "else loop", Toast.LENGTH_LONG).show()
+
             }
-            Toast.makeText(this,"you are verified", Toast.LENGTH_LONG).show()
         }
     }
 

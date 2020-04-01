@@ -23,10 +23,10 @@ class SignUpActivity : AppCompatActivity() {
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val firebaseAuthListener = firebaseAuth.addAuthStateListener {
         val user = firebaseAuth.currentUser?.uid
-        user?.let {
-            startActivity(LoginActivity.newIntent(this))
-            finish()
-        }
+//        user?.let {
+//            startActivity(LoginActivity.newIntent(this))
+//            finish()
+//        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
