@@ -19,5 +19,8 @@ class MyActivityFragment : PingFragment() {
         return inflater.inflate(R.layout.fragment_my_activity, container, false)
     }
 
+    override fun updateList() {
+
+    }
 
 }

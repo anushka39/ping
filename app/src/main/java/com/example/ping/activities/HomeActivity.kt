@@ -12,7 +12,9 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.example.ping.R
 import com.example.ping.fragments.HomeFragment
 import com.example.ping.fragments.MyActivityFragment
+import com.example.ping.fragments.PingFragment
 import com.example.ping.fragments.SearchFragment
+import com.example.ping.listeners.HomeCallBack
 import com.example.ping.util.DATA_USERS
 import com.example.ping.util.User
 import com.example.ping.util.loadUrl
@@ -21,7 +23,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_home.*
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(), HomeCallBack {
 
     private var sectionsPagerAdapter: SectionPageAdapter? = null
     private val firebaseAuth = FirebaseAuth.getInstance()
@@ -31,6 +33,7 @@ class HomeActivity : AppCompatActivity() {
     private val myActivityFragment = MyActivityFragment()
     private var userId = FirebaseAuth.getInstance().currentUser?.uid
     private var user: User? = null
+    private var currentFragment: PingFragment = homeFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,22 +55,24 @@ class HomeActivity : AppCompatActivity() {
                        titleBar.visibility = View.VISIBLE
                        titleBar.text = "home"
                        searchBar.visibility = View.GONE
+                       currentFragment = homeFragment
                    }
                     1 -> {
                         titleBar.visibility = View.GONE
                         searchBar.visibility = View.VISIBLE
+                        currentFragment = searchFragment
 
                     }
                     2 -> {
                         titleBar.visibility = View.VISIBLE
                         titleBar.text = "My Activity"
                         searchBar.visibility = View.GONE
+                        currentFragment = myActivityFragment
 
                     }
 
                 }
             }
-
         })
         logo.setOnClickListener { view ->
             startActivity(ProfileActivity.newIntent(this))
@@ -91,8 +96,16 @@ class HomeActivity : AppCompatActivity() {
         if (userId == null) {
             startActivity(LoginActivity.newIntent(this))
             finish()
+        } else {
+            populate()
         }
+    }
+    override fun onUserUpdated() {
         populate()
+    }
+
+    override fun onRefresh() {
+
     }
 
     fun populate() {
@@ -104,12 +117,20 @@ class HomeActivity : AppCompatActivity() {
                 user?.imageUrl?.let {
                     logo.loadUrl(it, R.drawable.plogo)
                 }
+                updateFragmentUser()
             }
             .addOnFailureListener { e ->
                 e.printStackTrace()
                 finish()
             }
    }
+    fun updateFragmentUser(){
+        homeFragment.setUser(user)
+        searchFragment.setUser(user)
+        myActivityFragment.setUser(user)
+        currentFragment.updateList()
+    }
+
     inner class SectionPageAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         override fun getItem(position: Int): Fragment {
             return when(position) {

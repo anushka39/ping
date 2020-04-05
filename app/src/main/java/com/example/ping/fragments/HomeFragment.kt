@@ -19,5 +19,8 @@ class HomeFragment : PingFragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
+    override fun updateList() {
+
+    }
 
 }

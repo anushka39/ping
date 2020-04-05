@@ -6,17 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.ping.R
 import com.example.ping.adapters.PostListAdapter
 import com.example.ping.listeners.PostListener
+import com.example.ping.util.*
 
-import com.example.ping.util.DATA_MESSAGES
-import com.example.ping.util.DATA_MESSAGE_HASHTAGS
-import com.example.ping.util.Message
-import com.example.ping.util.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_search.*
@@ -24,11 +22,7 @@ import kotlinx.android.synthetic.main.fragment_search.*
 class SearchFragment : PingFragment() {
 
     private var currentHashtag = ""
-    private var messageAdapter: PostListAdapter? = null
-    private var currentUser: User? = null
-    private val firebaseDB = FirebaseFirestore.getInstance()
-    private val userId = FirebaseAuth.getInstance().currentUser?.uid
-    private val listener: PostListener? = null
+    private var hashtagFollowed = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,15 +47,37 @@ class SearchFragment : PingFragment() {
             swipeRefresh.isRefreshing = false
             updateList()
         }
+
+        followHashtag.setOnClickListener {
+            followHashtag.isClickable = false
+            val followed = currentUser?.followHashtags
+            if (hashtagFollowed) {
+                followed?.remove(currentHashtag)
+            } else {
+                followed?.add(currentHashtag)
+            }
+                firebaseDB.collection(DATA_USERS).document(userId).update(DATA_USER_HASHTAGS, followed)
+                    .addOnSuccessListener {
+                        callBack?.onUserUpdated()
+                        followHashtag.isClickable = true
+                    }
+                    .addOnFailureListener {e ->
+                        e.printStackTrace()
+                        followHashtag.isClickable = true
+                    }
+
+        }
     }
 
     fun newHashtag(term: String){
         currentHashtag = term
         followHashtag.visibility = View.VISIBLE
+
+
         updateList()
     }
 
-    fun updateList() {
+     override fun updateList() {
         postList?.visibility = View.GONE
         firebaseDB.collection(DATA_MESSAGES)
             .whereArrayContains(DATA_MESSAGE_HASHTAGS, currentHashtag).get()
@@ -78,5 +94,16 @@ class SearchFragment : PingFragment() {
             .addOnFailureListener { e ->
                 e.printStackTrace()
             }
+         updateFollowDrawable()
+    }
+    private fun updateFollowDrawable(){
+        hashtagFollowed = currentUser?.followHashtags?.contains(currentHashtag) == true
+        context?.let {
+            if (hashtagFollowed) {
+                followHashtag.setImageDrawable(ContextCompat.getDrawable(it, R.drawable.follow))
+            }else {
+                followHashtag.setImageDrawable(ContextCompat.getDrawable(it, R.drawable.follow_inactive))
+            }
+        }
     }
 }

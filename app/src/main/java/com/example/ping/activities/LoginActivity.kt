@@ -65,31 +65,31 @@ class LoginActivity : AppCompatActivity()  {
 
         if (proceed) {
 
-            if (users != null && !users.isEmailVerified) {
+//            if (users != null && !users.isEmailVerified) {
                 loginProgressLayout.visibility = View.VISIBLE
-                Toast.makeText(this, "if loop", Toast.LENGTH_LONG).show()
-//                firebaseAuth.signInWithEmailAndPassword(
-//                    emailET.text.toString(),
-//                    passwordET.text.toString()
-//                )
-//                    .addOnCompleteListener { task: Task<AuthResult> ->
-//                        if (!task.isSuccessful) {
-//                            loginProgressLayout.visibility = View.GONE
-//                            Toast.makeText(
-//                                this, "Login error: ${task.exception?.localizedMessage}", Toast.LENGTH_SHORT
-//                            ).show()
-//                        }
-//                    }
-//                    .addOnFailureListener { e ->
-//                        e.printStackTrace()
-//                        loginProgressLayout.visibility = View.GONE
-//                    }
-//                startActivity(HomeActivity.newIntent(this))
-//                finish()
-            } else {
-                Toast.makeText(this, "else loop", Toast.LENGTH_LONG).show()
+//                Toast.makeText(this, "if loop", Toast.LENGTH_LONG).show()
+                firebaseAuth.signInWithEmailAndPassword(
+                    emailET.text.toString(),
+                    passwordET.text.toString()
+                )
+                    .addOnCompleteListener { task: Task<AuthResult> ->
+                        if (!task.isSuccessful) {
+                            loginProgressLayout.visibility = View.GONE
+                            Toast.makeText(
+                                this, "Login error: ${task.exception?.localizedMessage}", Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        e.printStackTrace()
+                        loginProgressLayout.visibility = View.GONE
+                    }
+                startActivity(HomeActivity.newIntent(this))
+                finish()
+           // } else {
+               // Toast.makeText(this, "else loop", Toast.LENGTH_LONG).show()
 
-            }
+          //  }
         }
     }
 
