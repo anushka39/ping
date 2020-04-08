@@ -105,7 +105,7 @@ class HomeActivity : AppCompatActivity(), HomeCallBack {
     }
 
     override fun onRefresh() {
-
+        currentFragment.updateList()
     }
 
     fun populate() {

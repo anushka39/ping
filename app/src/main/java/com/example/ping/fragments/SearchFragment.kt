@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.ping.R
 import com.example.ping.adapters.PostListAdapter
+import com.example.ping.listeners.PingListenerImpl
 import com.example.ping.listeners.PostListener
 import com.example.ping.util.*
 
@@ -34,6 +35,8 @@ class SearchFragment : PingFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        listener = PingListenerImpl(postList, currentUser, callBack)
 
         messageAdapter = PostListAdapter(userId!!, arrayListOf())
         messageAdapter?.setListener(listener)
