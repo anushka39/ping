@@ -98,7 +98,6 @@ class PingListenerImpl(val postList: RecyclerView, var user: User?, val callback
             } else {
                 share?.add(userId!!)
             }
-
             // UPDATE Db
             firebaseDB.collection(DATA_MESSAGES).document(message.messageId!!)
                 .update(DATA_MESSAGE_USER_IDS, share )
